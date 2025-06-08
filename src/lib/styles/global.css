@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+}
+
+#root {
+  height: 100vh;
+  position: relative;
+  overflow: auto;
+}
+
+.ant-menu,
+.ant-menu .ant-menu-sub {
+  background-color: inherit !important;
+}
+
+.ant-menu-title-content a {
+  color: inherit;
+}
+
+.ant-layout-sider-children .ant-menu.ant-menu-inline-collapsed {
+  width: 80px !important;
+}
