@@ -22,7 +22,8 @@ import { GenericObject } from "../types/misc.js";
 
 const twColors: any = twConfig.theme?.extend?.colors;
 
-const primaryColor = twColors.primary;
+const primaryColor = twColors["primary-500"];
+const bgColor = twColors.background;
 const langKey = "lang";
 const themeKey = "theme";
 
@@ -84,6 +85,7 @@ type RootContextType = {
     multiple?: boolean;
     onChange?: (files: File[]) => void;
   }) => void;
+  ip: React.RefObject<HTMLInputElement | null>;
   setPopoverWidth: (width: string) => void;
   themeMode: ThemeType;
   _themeMode: ThemeMode;
@@ -98,6 +100,7 @@ type RootContextType = {
 const initialValues: RootContextType = {
   setCssFromOutside: () => {},
   openFile: () => {},
+  ip: { current: null },
   setPopoverWidth: () => {},
   themeMode: ThemeMode.Light,
   _themeMode: ThemeMode.Light,
@@ -234,6 +237,7 @@ const RootContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
         ...initialValues,
         setCssFromOutside,
         setPopoverWidth,
+        ip: ipRef,
         openFile,
         themeMode,
         toggleThemeMode: (themeType) => {
@@ -259,6 +263,7 @@ const RootContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
               : theme.defaultAlgorithm,
           token: {
             colorPrimary: primaryColor,
+            colorBgContainer: bgColor,
             colorTextBase:
               themeMode === ThemeMode.Dark ? undefined : twColors.text,
           },

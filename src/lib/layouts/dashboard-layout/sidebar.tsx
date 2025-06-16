@@ -1,30 +1,11 @@
-import { useLang, useThemeMode } from "@/lib/contexts/root.context";
+import { useThemeMode } from "@/lib/contexts/root.context";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/store";
-import { JSSTheme } from "@/lib/types/misc";
 import { cn } from "@/lib/utils/styles.utils";
 import { authActions } from "@/modules/auth/slices/auth.slice";
 import { useResponsive } from "ahooks";
 import { Drawer, Layout, Typography } from "antd";
-import React, { useCallback } from "react";
-import { createUseStyles } from "react-jss";
+import React, { useCallback, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import MainMenu from "./main-menu";
-const { Header: AntdHeader } = Layout;
-
-const useStyles = createUseStyles((theme: JSSTheme) => ({
-  sider: {
-    "& .ant-layout-sider-children": {
-      backgroundColor: theme.colorBgContainer,
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      paddingBottom: "1rem",
-    },
-    "& .ant-layout-sider-trigger": {
-      backgroundColor: `${theme.colorPrimaryBg} !important`,
-    },
-  },
-}));
 
 const { Sider } = Layout;
 
@@ -61,12 +42,41 @@ export const Logo: React.FC<{
 };
 
 const Sidebar: React.FC = () => {
-  const classes = useStyles();
   const { md } = useResponsive();
   const dispatch = useAppDispatch();
   const collapsed = useAppSelector((state) => state.auth.sidebarCollapsed);
-  const { themeMode } = useThemeMode();
-  const { lang, translations } = useLang();
+  const sidebarRef = useRef<HTMLDivElement>(null);
+
+  const debounced = useCallback((func: Function, ms: number) => {
+    let timerId: number | null = null;
+    return (...args: any[]) => {
+      if (timerId) clearTimeout(timerId);
+      timerId = setTimeout(() => {
+        func(...args);
+      }, ms);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (sidebarRef.current) {
+      const sidebar = sidebarRef.current;
+      sidebar.addEventListener("scroll", debounced(handleScroll, 300));
+      return () => {
+        sidebar.removeEventListener("scroll", debounced(handleScroll, 300));
+      };
+    }
+  }, [sidebarRef.current]);
+
+  const handleScroll = useCallback(() => {
+    if (sidebarRef.current) {
+      const sidebar = sidebarRef.current;
+      const { clientHeight, scrollTop, scrollHeight } = sidebar;
+      if (scrollTop + clientHeight >= scrollHeight - 5) {
+        // Load more items or perform any action when scrolled to the bottom
+        console.log("Scrolled to the bottom");
+      }
+    }
+  }, [sidebarRef.current]);
 
   const toggleCollapsed = useCallback(() => {
     dispatch(authActions.toggleSidebarCollapsed());
@@ -76,26 +86,27 @@ const Sidebar: React.FC = () => {
     <>
       {md ? (
         <Sider
-          theme={themeMode}
-          collapsible
-          collapsed={collapsed}
-          onCollapse={toggleCollapsed}
-          width={200}
-          className={classes.sider}
+          ref={sidebarRef}
+          width={300}
+          className="h-screen overflow-y-scroll !bg-background border-r border-solid border-primary-100"
         >
-          <AntdHeader>
-            <Logo collapsed={collapsed} />
-          </AntdHeader>
-          <MainMenu />
+          {new Array(20).fill(0).map((_, index) => (
+            <div key={index} className="p-4">
+              <Typography.Text>Menu Item {index + 1}</Typography.Text>
+            </div>
+          ))}
         </Sider>
       ) : (
         <Drawer
-          placement={translations[lang].direction === "rtl" ? "right" : "left"}
           onClose={toggleCollapsed}
           open={!collapsed}
           title={<Logo collapsed={collapsed} />}
         >
-          <MainMenu />
+          {new Array(20).fill(0).map((_, index) => (
+            <div key={index} className="p-4">
+              <Typography.Text>Menu Item {index + 1}</Typography.Text>
+            </div>
+          ))}
         </Drawer>
       )}
     </>

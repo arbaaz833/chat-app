@@ -1,10 +1,7 @@
 import { JSSTheme } from "@/lib/types/misc";
-import { isDev } from "@/lib/utils/misc.utils";
-import { cn } from "@/lib/utils/styles.utils";
-import { Layout, Typography } from "antd";
+import { Layout } from "antd";
 import React, { PropsWithChildren } from "react";
 import { createUseStyles } from "react-jss";
-import pkgJson from "../../../../package.json";
 import EmptyLayout from "../empty-layout";
 import Header from "./header";
 import Sidebar from "./sidebar";
@@ -37,12 +34,6 @@ const DashboardLayout: React.FC<PropsWithChildren> = ({ children }) => {
           <Layout.Content className="p-8 flex-1 flex flex-col overflow-y-auto">
             {children}
           </Layout.Content>
-          <Layout.Footer className={cn("p-4 text-center", classes.footer)}>
-            <Typography.Text className="text-xs font-medium">
-              Version {pkgJson.version}
-              {isDev() ? " (dev)" : ""}
-            </Typography.Text>
-          </Layout.Footer>
         </Layout>
       </Layout>
     </EmptyLayout>

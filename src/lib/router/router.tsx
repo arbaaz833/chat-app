@@ -117,6 +117,7 @@ const AuthWrapper: React.FC<
   const navigate = useNavigate();
   const [isRendered, setIsRendered] = useState(false);
   const { status: authStatus } = useAuth();
+  console.log("authStatus: ", authStatus);
   const redirect = new URLSearchParams(location.search).get("redirect");
 
   useLayoutEffect(() => {

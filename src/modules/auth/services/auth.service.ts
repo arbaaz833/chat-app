@@ -1,26 +1,36 @@
-import { fakeApi } from "@/lib/utils/misc.utils";
+import axios from "@/lib/axios.config";
+import { objectToFormData } from "@/lib/utils/misc.utils";
 
-async function login({ email }: { email: string; password: string }) {
-  return fakeApi(() => ({
-    accessToken: email.toLowerCase(),
-    refreshToken: "refreshToken",
-  })) as Promise<{ accessToken: string; refreshToken: string }>;
+async function login({ email, password }: { email: string; password: string }) {
+  return await axios.post("/auth/login", { email, password });
 }
 
 async function logout() {
-  return fakeApi(() => true) as Promise<boolean>;
+  return axios.delete("/auth/logout");
+}
+
+async function signup(data: {
+  email: string;
+  password: string;
+  username: string;
+  file?: File;
+}) {
+  const formData = objectToFormData(data);
+  return axios.post("/auth/signup", formData);
 }
 
 async function refreshToken() {
-  return fakeApi(() => ({
-    accessToken: "accessToken",
-    refreshToken: "refreshToken",
-  })) as Promise<{ accessToken: string; refreshToken: string }>;
+  const res = await axios.post("/auth/refresh");
+  return {
+    accessToken: res.data.accessToken,
+    refreshToken: res.data.refreshToken,
+  };
 }
 
 const authService = {
   login,
   logout,
+  signup,
   refreshToken,
 };
 

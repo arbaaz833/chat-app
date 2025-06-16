@@ -1,12 +1,12 @@
-import { Role } from "@/modules/auth/types/profile.type";
 import NotFound from "@/pages/404/404";
+import { Auth } from "@/pages/auth /auth";
 import { Preview } from "@/pages/preview";
 import { ReactNode } from "react";
 
 export type RouterConfig = {
   layoutType?: "empty" | "auth" | "dashboard" | "none";
   authType?: "public" | "private" | "none";
-  allowedRoles?: Role[];
+  allowedRoles?: string[];
   component: ReactNode;
   menuItem?: {
     title: ReactNode;
@@ -23,11 +23,19 @@ export type RouterConfig = {
 export const useRouterConfig = (): RouterConfig[] => {
   return [
     {
-      layoutType: "empty",
-      authType: "public",
+      layoutType: "dashboard",
+      authType: "none",
       component: <Preview />,
       route: {
         path: "/",
+      },
+    },
+    {
+      layoutType: "auth",
+      authType: "public",
+      component: <Auth />,
+      route: {
+        path: "/auth",
       },
     },
     {
