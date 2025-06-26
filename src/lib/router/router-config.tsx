@@ -24,7 +24,7 @@ export const useRouterConfig = (): RouterConfig[] => {
   return [
     {
       layoutType: "dashboard",
-      authType: "none",
+      authType: "private",
       component: <Preview />,
       route: {
         path: "/",
@@ -35,7 +35,7 @@ export const useRouterConfig = (): RouterConfig[] => {
       authType: "public",
       component: <Auth />,
       route: {
-        path: "/auth",
+        path: "/login",
       },
     },
     {

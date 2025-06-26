@@ -19,7 +19,7 @@ export const Auth: FC<IProps> = () => {
             CHAT APP
           </div>
         </div>
-        {isSignup ? <Signup /> : <Login />}
+        {isSignup ? <Signup toggleForm={toggleSignup} /> : <Login />}
 
         <div className="text-center text-sm">
           {isSignup ? "Already have an account?" : "Don't have an account?"}

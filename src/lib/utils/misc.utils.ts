@@ -49,6 +49,16 @@ export function isDev() {
   return import.meta.env.VITE_ENV === "dev";
 }
 
+export const debounced = (func: Function, ms: number) => {
+  let timerId: number | null = null;
+  return (...args: any[]) => {
+    if (timerId) clearTimeout(timerId);
+    timerId = setTimeout(() => {
+      func(...args);
+    }, ms);
+  };
+};
+
 export function isNullish(value: any) {
   return [null, undefined, ""].includes(value);
 }

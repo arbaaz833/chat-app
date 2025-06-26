@@ -1,6 +1,8 @@
+import { useAppDispatch } from "@/lib/redux/store";
 import { JSSTheme } from "@/lib/types/misc";
+import { authActions } from "@/modules/auth/slices/auth.slice";
 import { Layout } from "antd";
-import React, { PropsWithChildren } from "react";
+import React, { PropsWithChildren, useEffect } from "react";
 import { createUseStyles } from "react-jss";
 import EmptyLayout from "../empty-layout";
 import Header from "./header";
@@ -24,6 +26,11 @@ const useStyles = createUseStyles((theme: JSSTheme) => ({
 
 const DashboardLayout: React.FC<PropsWithChildren> = ({ children }) => {
   const classes = useStyles();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(authActions.userDetails());
+  }, []);
 
   return (
     <EmptyLayout>

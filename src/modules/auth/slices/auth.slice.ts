@@ -42,6 +42,11 @@ const signup = createAsyncThunk(
   }
 );
 
+const userDetails = createAsyncThunk(`${name}/userDetails`, async () => {
+  const res = await authService.userDetails();
+  return res.data;
+});
+
 const logout = createAsyncThunk(`${name}/logout`, async () => {
   await authService.logout();
   localStorage.removeItem("accessToken");
@@ -71,8 +76,17 @@ export const authSlice = createSlice({
     builder.addCase(logout.fulfilled, (state) => {
       state.status = "unauthenticated";
     });
+    builder.addCase(userDetails.fulfilled, (state, action) => {
+      state.user = action.payload;
+    });
   },
 });
 
 //action creators
-export const authActions = { ...authSlice.actions, login, logout, signup };
+export const authActions = {
+  ...authSlice.actions,
+  login,
+  logout,
+  signup,
+  userDetails,
+};

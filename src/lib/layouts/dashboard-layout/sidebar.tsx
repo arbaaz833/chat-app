@@ -1,5 +1,8 @@
+import { Conversations } from "@/lib/components/conversations/Conversations";
+import { SearchBar } from "@/lib/components/searchBar/SearchBar";
 import { useThemeMode } from "@/lib/contexts/root.context";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/store";
+import { debounced } from "@/lib/utils/misc.utils";
 import { cn } from "@/lib/utils/styles.utils";
 import { authActions } from "@/modules/auth/slices/auth.slice";
 import { useResponsive } from "ahooks";
@@ -47,16 +50,6 @@ const Sidebar: React.FC = () => {
   const collapsed = useAppSelector((state) => state.auth.sidebarCollapsed);
   const sidebarRef = useRef<HTMLDivElement>(null);
 
-  const debounced = useCallback((func: Function, ms: number) => {
-    let timerId: number | null = null;
-    return (...args: any[]) => {
-      if (timerId) clearTimeout(timerId);
-      timerId = setTimeout(() => {
-        func(...args);
-      }, ms);
-    };
-  }, []);
-
   useEffect(() => {
     if (sidebarRef.current) {
       const sidebar = sidebarRef.current;
@@ -85,17 +78,16 @@ const Sidebar: React.FC = () => {
   return (
     <>
       {md ? (
-        <Sider
-          ref={sidebarRef}
-          width={300}
-          className="h-screen overflow-y-scroll !bg-background border-r border-solid border-primary-100"
-        >
-          {new Array(20).fill(0).map((_, index) => (
-            <div key={index} className="p-4">
-              <Typography.Text>Menu Item {index + 1}</Typography.Text>
-            </div>
-          ))}
-        </Sider>
+        <div>
+          <SearchBar />
+          <Sider
+            ref={sidebarRef}
+            width={300}
+            className="h-[calc(100vh-64px)] overflow-y-scroll !bg-background p-2"
+          >
+            <Conversations />
+          </Sider>
+        </div>
       ) : (
         <Drawer
           onClose={toggleCollapsed}

@@ -5,6 +5,10 @@ async function login({ email, password }: { email: string; password: string }) {
   return await axios.post("/auth/login", { email, password });
 }
 
+async function userDetails() {
+  return await axios.get("/auth/userDetails");
+}
+
 async function logout() {
   return axios.delete("/auth/logout");
 }
@@ -16,7 +20,9 @@ async function signup(data: {
   file?: File;
 }) {
   const formData = objectToFormData(data);
-  return axios.post("/auth/signup", formData);
+  return axios.post("/auth/signup", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
 }
 
 async function refreshToken() {
@@ -32,6 +38,7 @@ const authService = {
   logout,
   signup,
   refreshToken,
+  userDetails,
 };
 
 export default authService;
