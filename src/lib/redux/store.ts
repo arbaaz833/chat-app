@@ -1,5 +1,6 @@
 import { authSlice } from "@/modules/auth/slices/auth.slice";
 import { conversationsSlice } from "@/modules/conversations/slice/conversations.slice";
+import { messagesSlice } from "@/modules/messages/slice/messages.slice";
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { statusHandlerEnahncer } from "./enhancers/status.enhancer";
@@ -10,6 +11,7 @@ export const store = configureStore({
   reducer: {
     auth: authSlice.reducer,
     conversations: conversationsSlice.reducer,
+    message: messagesSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }).concat(

@@ -4,9 +4,11 @@ import { useThemeMode } from "@/lib/contexts/root.context";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/store";
 import { debounced } from "@/lib/utils/misc.utils";
 import { cn } from "@/lib/utils/styles.utils";
+import { useAuth } from "@/modules/auth/hooks/auth.hooks";
 import { authActions } from "@/modules/auth/slices/auth.slice";
+import { SettingOutlined } from "@ant-design/icons";
 import { useResponsive } from "ahooks";
-import { Drawer, Layout, Typography } from "antd";
+import { Drawer, Dropdown, Layout, Typography } from "antd";
 import React, { useCallback, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
@@ -49,6 +51,7 @@ const Sidebar: React.FC = () => {
   const dispatch = useAppDispatch();
   const collapsed = useAppSelector((state) => state.auth.sidebarCollapsed);
   const sidebarRef = useRef<HTMLDivElement>(null);
+  const { logoutLoading } = useAuth();
 
   useEffect(() => {
     if (sidebarRef.current) {
@@ -78,15 +81,37 @@ const Sidebar: React.FC = () => {
   return (
     <>
       {md ? (
-        <div>
-          <SearchBar />
-          <Sider
-            ref={sidebarRef}
-            width={300}
-            className="h-[calc(100vh-64px)] overflow-y-scroll !bg-background p-2"
-          >
-            <Conversations />
-          </Sider>
+        <div className="flex">
+          <div className="h-full p-2 flex flex-col items-center justify-end bg-background">
+            <Dropdown
+              menu={{
+                items: [
+                  {
+                    key: "settings",
+                    label: "Settings",
+                  },
+                  {
+                    key: "logout",
+                    label: "Logout",
+                    disabled: logoutLoading,
+                  },
+                ],
+              }}
+              trigger={["click"]}
+            >
+              <SettingOutlined className="text-xl" />
+            </Dropdown>
+          </div>
+          <div>
+            <SearchBar />
+            <Sider
+              ref={sidebarRef}
+              width={300}
+              className="h-[calc(100vh-64px)] overflow-y-scroll !bg-background p-2"
+            >
+              <Conversations />
+            </Sider>
+          </div>
         </div>
       ) : (
         <Drawer

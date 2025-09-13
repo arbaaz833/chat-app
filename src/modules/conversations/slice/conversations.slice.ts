@@ -25,8 +25,17 @@ const getConversations = createAsyncThunk(
   `${name}/getConversations`,
   async (page: number) => {
     const response = await conversationService.getConversations(page);
-    console.log("response.data.docs: ", response.data.docs);
+
     return response.data.docs;
+  }
+);
+
+const getConversation = createAsyncThunk(
+  `${name}/getConversation`,
+  async (id: string, { dispatch }) => {
+    const response = await conversationService.getConversation(id);
+    console.log("response: ", response.data);
+    dispatch(conversationsActions.setSelectedConversation(response.data));
   }
 );
 
@@ -45,6 +54,9 @@ export const conversationsSlice = createSlice({
     setShowResults(state, action) {
       state.showSearchResults = action.payload;
     },
+    setSelectedConversation(state, action) {
+      state.selectedConversation = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getConversations.fulfilled, (state, action) => {
@@ -60,4 +72,5 @@ export const conversationsActions = {
   ...conversationsSlice.actions,
   getConversations,
   searchConversations,
+  getConversation,
 };

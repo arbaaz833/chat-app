@@ -1,9 +1,8 @@
 import { useAppDispatch, useAppSelector } from "@/lib/redux/store";
-import { useAuth } from "@/modules/auth/hooks/auth.hooks";
 import { authActions } from "@/modules/auth/slices/auth.slice";
-import { DownOutlined, MenuOutlined } from "@ant-design/icons";
+import { MenuOutlined } from "@ant-design/icons";
 import { useResponsive } from "ahooks";
-import { Avatar, Dropdown, Layout, Space } from "antd";
+import { Layout, Space } from "antd";
 import { useCallback } from "react";
 import { Logo } from "./sidebar";
 
@@ -13,7 +12,6 @@ function Header() {
   const dispatch = useAppDispatch();
   const { md } = useResponsive();
   const collapsed = useAppSelector((state) => state.auth.sidebarCollapsed);
-  const { logoutLoading } = useAuth();
 
   const toggleCollapsed = useCallback(() => {
     dispatch(authActions.toggleSidebarCollapsed());
@@ -32,29 +30,7 @@ function Header() {
         </Space>
       )}
 
-      <Space size={20}>
-        <Dropdown
-          menu={{
-            items: [
-              {
-                key: "settings",
-                label: "Settings",
-              },
-              {
-                key: "logout",
-                label: "Logout",
-                disabled: logoutLoading,
-              },
-            ],
-          }}
-          trigger={["click"]}
-        >
-          <Space align="center" className="cursor-pointer">
-            <Avatar />
-            <DownOutlined />
-          </Space>
-        </Dropdown>
-      </Space>
+      <Space size={20}></Space>
     </AntdHeader>
   );
 }

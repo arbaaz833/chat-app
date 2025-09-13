@@ -16,7 +16,7 @@ export const SearchBar: FC<IProps> = ({}) => {
   const onChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value;
     console.log("Search input changed:", e.target.value);
-    dispatch(conversationsActions.searchConversations(value));
+    if (value) dispatch(conversationsActions.searchConversations(value));
     if (!value && result) {
       dispatch(conversationsActions.setShowResults(false));
     }

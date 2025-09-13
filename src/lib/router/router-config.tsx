@@ -1,6 +1,6 @@
 import NotFound from "@/pages/404/404";
 import { Auth } from "@/pages/auth /auth";
-import { Preview } from "@/pages/preview";
+import { Conversation } from "@/pages/messages";
 import { ReactNode } from "react";
 
 export type RouterConfig = {
@@ -25,7 +25,7 @@ export const useRouterConfig = (): RouterConfig[] => {
     {
       layoutType: "dashboard",
       authType: "private",
-      component: <Preview />,
+      component: <Conversation />,
       route: {
         path: "/",
       },

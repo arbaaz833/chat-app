@@ -5,7 +5,6 @@ import { Layout } from "antd";
 import React, { PropsWithChildren, useEffect } from "react";
 import { createUseStyles } from "react-jss";
 import EmptyLayout from "../empty-layout";
-import Header from "./header";
 import Sidebar from "./sidebar";
 
 const useStyles = createUseStyles((theme: JSSTheme) => ({
@@ -37,8 +36,8 @@ const DashboardLayout: React.FC<PropsWithChildren> = ({ children }) => {
       <Layout className={classes.root}>
         <Sidebar />
         <Layout>
-          <Header />
-          <Layout.Content className="p-8 flex-1 flex flex-col overflow-y-auto">
+          {/* <Header /> */}
+          <Layout.Content className="flex-1 flex flex-col overflow-y-auto">
             {children}
           </Layout.Content>
         </Layout>

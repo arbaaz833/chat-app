@@ -5,6 +5,7 @@ export type Conversation = {
     id: string;
     username: string;
     profilePicture: string;
+    lastSeen: string;
   }>;
   admins: string[];
   groupName?: string;

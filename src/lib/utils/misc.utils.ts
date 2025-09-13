@@ -1,3 +1,4 @@
+import promiseRetry from "promise-retry";
 export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
 export const fakeApi = async (
@@ -49,12 +50,43 @@ export function isDev() {
   return import.meta.env.VITE_ENV === "dev";
 }
 
+export const promiseWithRetry = async (
+  func: () => Promise<any>,
+  retries: number,
+  onSucess?: Function
+) => {
+  return promiseRetry(
+    function (retry) {
+      return func()
+        .then((res) => {
+          if (onSucess) {
+            onSucess(res);
+          }
+        })
+        .catch(retry);
+    },
+    { retries: retries }
+  );
+};
+
 export const debounced = (func: Function, ms: number) => {
   let timerId: number | null = null;
   return (...args: any[]) => {
     if (timerId) clearTimeout(timerId);
     timerId = setTimeout(() => {
       func(...args);
+    }, ms);
+  };
+};
+
+export const throttled = (func: Function, ms: number) => {
+  let isThrottled = false;
+  return (...args: any[]) => {
+    if (isThrottled) return;
+    func(...args);
+    isThrottled = true;
+    setTimeout(() => {
+      isThrottled = false;
     }, ms);
   };
 };

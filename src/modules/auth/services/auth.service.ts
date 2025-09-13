@@ -26,7 +26,16 @@ async function signup(data: {
 }
 
 async function refreshToken() {
-  const res = await axios.post("/auth/refresh");
+  const token = localStorage.getItem("refreshToken");
+  let res = await axios.post(
+    "/auth/refresh",
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   return {
     accessToken: res.data.accessToken,
     refreshToken: res.data.refreshToken,
